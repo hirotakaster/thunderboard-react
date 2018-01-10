@@ -89,11 +89,15 @@ public class DemoIOActivity extends BaseDemoActivity implements DemoIOViewListen
 
         // create gameworld and resize to diplay size
         b2World = new World(new Vec2(0.0f,9.81f));
-        CreateFloor(new Vec2(250.0f, displaySize.y - 350), new Vec2(80.0f,0.5f), BodyType.Floor);
+        CreateBox(new Vec2(250.0f, displaySize.y - 350), new Vec2(80.0f,0.5f), BodyType.Floor);
 
-        CreateFloor(new Vec2(0.0f, 0.0f), new Vec2(displaySize.x,0.5f), BodyType.Wall);
-        CreateFloor(new Vec2(0.0f, 0.0f), new Vec2(0.5f,displaySize.y - 100), BodyType.Wall);
-        CreateFloor(new Vec2(displaySize.x, 0.0f), new Vec2(0.5f,displaySize.y - 100), BodyType.Wall);
+        CreateBox(new Vec2(0.0f, 0.0f), new Vec2(displaySize.x,0.5f), BodyType.Wall);
+        CreateBox(new Vec2(0.0f, 0.0f), new Vec2(0.5f,displaySize.y - 100), BodyType.Wall);
+        CreateBox(new Vec2(displaySize.x, 0.0f), new Vec2(0.5f,displaySize.y - 100), BodyType.Wall);
+
+        CreateBox(new Vec2(displaySize.x / 3, 250.0f), new Vec2(40.0f,40.0f), BodyType.Box);
+        CreateBox(new Vec2(2 * (displaySize.x / 3 ), 350.0f), new Vec2(40.0f,40.0f), BodyType.Box);
+        CreateBox(new Vec2( (displaySize.x / 4 ), 450.0f), new Vec2(40.0f,40.0f), BodyType.Box);
 
         CreateBall(new Vec2(nextFloat(10.0f, (float)displaySize.x - 10), nextFloat(10.0f, (float)200.0f)),
                    new Vec2(nextFloat(-1 * ballMaxSpeed, ballMaxSpeed), nextFloat(-1 * ballMaxSpeed, ballMaxSpeed)));
@@ -186,7 +190,7 @@ public class DemoIOActivity extends BaseDemoActivity implements DemoIOViewListen
         bodyDef.active = true;
         bodyDef.bullet = false;
         bodyDef.allowSleep = true;
-        bodyDef.gravityScale = 0.0f;
+        bodyDef.gravityScale = 1.0f;
         bodyDef.linearDamping = 0.0f;
         bodyDef.angularDamping = 0.0f;
         bodyDef.userData = (Object) BodyType.Ball;
@@ -208,7 +212,7 @@ public class DemoIOActivity extends BaseDemoActivity implements DemoIOViewListen
         body.createFixture(fixtureDef);
     }
 
-    private void CreateFloor(Vec2 position1, Vec2 position2, BodyType floortype)  {
+    private void CreateBox(Vec2 position1, Vec2 position2, BodyType floortype)  {
         BodyDef bodyDef = new BodyDef();
 
         bodyDef.position = position1;
@@ -248,11 +252,18 @@ public class DemoIOActivity extends BaseDemoActivity implements DemoIOViewListen
         public GameView(Context context) {
             super(context);
         }
-        public void drawFloor(Body body) {
+        public void drawBox(Body body) {
             Paint mPaint = new Paint();
             mPaint.setAntiAlias(true);
-            mPaint.setColor(Color.RED);
-            canvas.drawRect(body.getPosition().x - 80, body.getPosition().y, body.getPosition().x + 80, body.getPosition().y + 10, mPaint);
+            if ((BodyType)body.getUserData() == BodyType.Floor) {
+                mPaint.setColor(Color.RED);
+                canvas.drawRect(body.getPosition().x - 80, body.getPosition().y, body.getPosition().x + 80, body.getPosition().y + 10, mPaint);
+            }
+            else if ((BodyType)body.getUserData() == BodyType.Box) {
+                mPaint.setColor(Color.BLUE);
+                canvas.drawRect(body.getPosition().x - 40, body.getPosition().y - 40
+                        , body.getPosition().x + 40, body.getPosition().y + 40, mPaint);
+            }
         }
 
         public void drawCircle(Body body) {
@@ -300,9 +311,8 @@ public class DemoIOActivity extends BaseDemoActivity implements DemoIOViewListen
                 {
                     switch((BodyType)body.getUserData()) {
                         case Box:
-                            break;
                         case Floor:
-                            drawFloor(body);
+                            drawBox(body);
                             break;
                         case Ball:
                             drawCircle(body);

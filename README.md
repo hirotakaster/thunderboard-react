@@ -1,6 +1,6 @@
 # Thunder Board React Sample App
 
-Sample Grame application for Thunderboard React based Android App[https://github.com/SiliconLabs/thunderboard-android]
+Sample Grame application for Thunderboard React based <a href="https://github.com/SiliconLabs/thunderboard-android">Android App</a>
 
 ![Device Selection](screenshots/screenshot1.png).
 

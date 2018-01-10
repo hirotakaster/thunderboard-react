@@ -118,10 +118,8 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     // AltBeacon Android library
     compile 'org.altbeacon:android-beacon-library:2.6.1@aar'
-
     compile 'org.jbox2d:jbox2d-library:2.2.1.1'
     compile 'com.android.support:multidex:1.0.1'
-
 }
 
 hockeyapp {
